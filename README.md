@@ -1,7 +1,219 @@
 # sample_cmake_project
 
 ## Overview
-**sample_cmake_project** is a CMake‑based C++ project that implements a custom Linux kernel driver for the Raspberry Pi, enabling software‑based PWM (Pulse‑Width Modulation) generation through GPIO bit‑banging. By leveraging precise timing loops and kernel timers, the driver can toggle any GPIO pin at user‑defined frequencies and duty cycles, providing a flexible alternative to the limited hardware PWM channels available on the Pi. The driver exposes a clean user‑space interface via standard Linux mechanisms (ioctl and sysfs), allowing applications to configure PWM parameters in real time without recompiling or reloading the module.
+# Raspberry Pi Compute Module 5 Hardware Peripheral Verification Tool
+
+## Overview
+**Raspberry Pi CM5 Peripheral Verification Tool** is a comprehensive CMake-based C++ testing framework designed to verify and monitor all hardware peripherals on the Raspberry Pi Compute Module 5. The tool provides both short verification tests and extended monitoring capabilities for each peripheral, ensuring complete hardware validation.
+
+## Purpose & Motivation
+The Raspberry Pi Compute Module 5 features a wide array of hardware peripherals including CPU, GPU, memory, storage, display, camera, USB, networking, GPIO, and power management systems. Comprehensive testing of these peripherals is crucial for:
+
+- Hardware validation during development
+- Quality assurance in production
+- Debugging hardware-related issues
+- Performance monitoring and diagnostics
+- Ensuring system stability over time
+
+This tool addresses the need for systematic, automated testing of all CM5 peripherals with professional-grade C++ implementation and extensive documentation.
+
+## Key Features
+- **Modular Architecture** – Each peripheral has its own library and test suite
+- **Dual Testing Modes** – Short verification tests and extended monitoring
+- **Comprehensive Coverage** – Tests all major CM5 hardware peripherals
+- **Professional Code Quality** – Full Doxygen documentation, modern C++17, PIMPL pattern
+- **CMake Build System** – Cross-platform build configuration with testing support
+- **Extensible Framework** – Easy to add new peripherals and test cases
+- **Command-Line Interface** – Flexible CLI for individual or batch testing
+
+## Supported Peripherals
+
+| Peripheral | Status | Short Test | Monitoring | Description |
+|------------|--------|------------|------------|-------------|
+| **CPU** | ✅ Implemented | Core validation, benchmarking, temperature | Temperature stability | CPU performance and thermal monitoring |
+| **GPIO** | ✅ Implemented | Digital I/O, PWM, I2C, SPI, UART | Signal stability | General-purpose I/O and communication interfaces |
+| **GPU** | 🚧 Planned | OpenGL/Vulkan tests | Performance monitoring | Graphics processing unit validation |
+| **Memory** | 🚧 Planned | RAM testing, ECC validation | Memory integrity | System memory verification |
+| **Storage** | 🚧 Planned | eMMC/SD card tests | Wear monitoring | Storage device validation |
+| **Display** | 🚧 Planned | HDMI output tests | Display stability | Video output verification |
+| **Camera** | 🚧 Planned | CSI-2 interface tests | Image capture validation | Camera module testing |
+| **USB** | 🚧 Planned | Device enumeration, data transfer | Connection stability | USB host/device testing |
+| **Networking** | 🚧 Planned | Ethernet/WiFi tests | Bandwidth monitoring | Network interface validation |
+| **Power** | 🚧 Planned | Voltage monitoring, fan control | Power stability | Power management testing |
+
+## Architecture
+
+### Core Components
+- **PeripheralTester** – Abstract base class defining the testing interface
+- **TestReport** – Structured test results with timing and diagnostic information
+- **Modular Libraries** – Each peripheral implemented as a separate static library
+- **Main Application** – CLI orchestrator for running tests across all peripherals
+
+### Testing Framework
+- **Short Tests** – Quick verification (seconds) of peripheral functionality
+- **Monitoring Tests** – Extended testing (minutes/hours) for stability validation
+- **Automated Reporting** – Detailed results with pass/fail status and diagnostics
+
+## Getting Started
+
+### Prerequisites
+- Linux system (Raspberry Pi OS recommended for full hardware access)
+- CMake ≥ 3.20
+- GCC ≥ 9.0 with C++17 support
+- Doxygen (for documentation generation)
+- Google Test (automatically downloaded via FetchContent)
+
+### Build & Install
+```bash
+# Clone the repository
+git clone https://github.com/soccentric/cm5-peripheral-test.git
+cd cm5-peripheral-test
+
+# Create build directory
+mkdir build && cd build
+
+# Configure the project
+cmake .. -DCMAKE_BUILD_TYPE=Release
+
+# Build all components
+make
+
+# Run tests
+make test
+
+# Generate documentation
+make docs
+```
+
+### Usage Examples
+
+#### List Available Peripherals
+```bash
+./cm5_peripheral_test_app --list
+```
+
+#### Run All Short Tests
+```bash
+./cm5_peripheral_test_app --all-short
+```
+
+#### Run Individual Peripheral Tests
+```bash
+# CPU tests
+./cm5_peripheral_test_app --cpu-short
+./cm5_peripheral_test_app --cpu-monitor 300
+
+# GPIO tests
+./cm5_peripheral_test_app --gpio-short
+./cm5_peripheral_test_app --gpio-monitor 60
+```
+
+#### Run Monitoring Tests
+```bash
+# Monitor all peripherals for 10 minutes
+./cm5_peripheral_test_app --all-monitor 600
+```
+
+## Project Structure
+```
+cm5-peripheral-test/
+├── CMakeLists.txt              # Main build configuration
+├── README.md                   # This file
+├── LICENSE                     # MIT License
+├── include/                    # Public headers
+│   ├── peripheral_tester.h     # Base testing interface
+│   ├── cpu_tester.h           # CPU tester interface
+│   └── gpio_tester.h          # GPIO tester interface
+├── src/                        # Legacy sample code (to be removed)
+├── libs/                       # Peripheral libraries
+│   ├── cpu/                   # CPU testing library
+│   └── gpio/                  # GPIO testing library
+├── apps/                       # Peripheral-specific applications
+│   ├── cpu/                   # CPU test application
+│   └── gpio/                  # GPIO test application
+├── tests/                      # Unit tests
+│   ├── cpu/                   # CPU unit tests
+│   └── gpio/                  # GPIO unit tests
+├── app/                        # Main test orchestrator
+└── docs/                       # Documentation
+```
+
+## Development Status
+
+### Completed (v1.0)
+- ✅ Project architecture and build system
+- ✅ Base testing framework (PeripheralTester interface)
+- ✅ CPU peripheral testing (benchmarking, temperature, multi-core)
+- ✅ GPIO peripheral testing (digital I/O, PWM, I2C, SPI, UART)
+- ✅ Main application with CLI interface
+- ✅ Comprehensive Doxygen documentation
+- ✅ Unit testing with Google Test
+- ✅ CMake packaging and installation
+
+### In Development
+- 🚧 GPU testing (OpenGL/Vulkan validation)
+- 🚧 Memory testing (RAM integrity, ECC)
+- 🚧 Storage testing (eMMC/SD card validation)
+- 🚧 Display testing (HDMI output verification)
+- 🚧 Camera testing (CSI-2 interface validation)
+- 🚧 USB testing (host/device functionality)
+- 🚧 Networking testing (Ethernet/WiFi validation)
+- 🚧 Power management testing (voltage, fan, RTC)
+
+## Contributing
+Contributions are welcome! The project follows these development practices:
+
+1. **Code Style** – Modern C++17 with RAII, PIMPL pattern, and comprehensive error handling
+2. **Documentation** – All code must have complete Doxygen comments
+3. **Testing** – Unit tests required for all new functionality
+4. **Modularity** – Each peripheral is a separate library with its own tests
+
+### Adding a New Peripheral
+1. Create peripheral header in `include/`
+2. Implement tester class inheriting from `PeripheralTester`
+3. Add library in `libs/` with CMake configuration
+4. Create unit tests in `tests/`
+5. Add CLI support in main application
+6. Update documentation
+
+## API Reference
+
+### PeripheralTester Interface
+```cpp
+class PeripheralTester {
+public:
+    virtual ~PeripheralTester() = default;
+    virtual TestReport short_test() = 0;
+    virtual TestReport monitor_test(std::chrono::seconds duration) = 0;
+    virtual std::string get_peripheral_name() const = 0;
+    virtual bool is_available() const = 0;
+};
+```
+
+### Test Results
+```cpp
+enum class TestResult { SUCCESS, FAILURE, NOT_SUPPORTED, TIMEOUT, SKIPPED };
+
+struct TestReport {
+    TestResult result;
+    std::string peripheral_name;
+    std::chrono::milliseconds duration;
+    std::string details;
+    std::chrono::system_clock::time_point timestamp;
+};
+```
+
+## License
+This project is licensed under the **MIT License** – see the `LICENSE` file for details.
+
+## Contact
+- **Author**: Sandesh Ghimire
+- **Organization**: Soccentric LLC
+- **Email**: sandesh@soccentric.com
+
+---
+
+*Built for the Raspberry Pi Compute Module 5 – ensuring hardware reliability through comprehensive testing.*
 
 ## Purpose & Motivation
 Many embedded projects quickly run into the bottleneck of having only a handful of hardware PWM outputs, while the need for additional PWM signals grows—for example, driving multiple LEDs, servos, or motor controllers simultaneously. **sample_cmake_project** addresses this limitation by moving PWM generation into software, making *any* GPIO pin a potential PWM source. Although this approach is more CPU‑intensive and slightly less precise than hardware PWM, it offers unparalleled flexibility: you can create as many PWM streams as you need, change frequencies on the fly, and experiment with unconventional duty‑cycle patterns that hardware modules may not support. This makes the project ideal for prototyping, educational purposes, and niche applications where hardware resources are scarce.

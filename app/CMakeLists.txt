@@ -1,8 +1,9 @@
-add_executable(sample_cmake_project_app main.cpp)
-target_link_libraries(sample_cmake_project_app PRIVATE sample_cmake_project)
-target_compile_features(sample_cmake_project_app PRIVATE cxx_std_17)
+add_executable(cm5_peripheral_test_app main.cpp)
+target_link_libraries(cm5_peripheral_test_app PRIVATE gpio_tester cpu_tester)
+target_include_directories(cm5_peripheral_test_app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+target_compile_features(cm5_peripheral_test_app PRIVATE cxx_std_17)
 
 # Install
-install(TARGETS sample_cmake_project_app
+install(TARGETS cm5_peripheral_test_app
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

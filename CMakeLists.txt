@@ -38,6 +38,8 @@ if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
 add_subdirectory(app)
+add_subdirectory(libs)
+add_subdirectory(apps)
 add_subdirectory(docs)
 
 # Install
